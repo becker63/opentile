@@ -18,6 +18,7 @@ struct windowarray
   int screeny;
   int posx;
   int posy;
+  int desktop;
 };
 
 struct expected
@@ -118,6 +119,7 @@ int display_get_windows(Display *display, Window window, int desktop)
       windows[x1].screeny = y - attr.y;
       windows[x1].posx = attr.width;
       windows[x1].posy = attr.height;
+      windows[x1].desktop = window_get_desktop(display, twindows[count]);;
       x1 = x1 + 1;
     }
   }
@@ -235,7 +237,7 @@ int windowinit(Display *display, Window root, int gap){
   
           int distance = sqrt(pow(curx - expectedx, 2) + pow(cury - expectedy, 2));
   
-          printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\n\n",curx, cury, expectedx,expectedy, distance, windows[i].name);
+          printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\ndesktop: %i\n\n",curx, cury, expectedx,expectedy, distance, windows[i].name, windows[i].desktop);
       
         }
         i2++;
@@ -248,7 +250,6 @@ int windowinit(Display *display, Window root, int gap){
 }
   
  
-
 
 
 
@@ -267,6 +268,8 @@ int main()
 
 
   windowinit(display, root, gap);
+
+  printf("%i", desktop);
 
   Screen *screen = ScreenOfDisplay(display, 0);
   int posy = screen->height;
