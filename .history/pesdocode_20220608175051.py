@@ -1,0 +1,21 @@
+from dataclasses import dataclass
+import random
+
+@dataclass
+class Point:
+    sizex: int
+    sizey: int
+    posx: int = 0.0
+    posy: int = 
+
+x = 1080
+y = 1920
+
+windows = 4
+o = x / 3
+
+i = 1
+while(i != windows):
+    print(o * i)
+    i = i + 1
+
