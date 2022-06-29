@@ -18,6 +18,8 @@ struct expected
   int expectedx;
   int expectedy;
   int on;
+  int correspondingWin;
+  int corrWinDistance;
 };
 
 extern struct expected ewindows[ng];

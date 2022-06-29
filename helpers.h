@@ -9,3 +9,7 @@ extern int display_get_current_desktop(Display *display, Window window);
 extern int window_get_desktop(Display *display, Window window);
 
 extern int enumwindows();
+
+extern unsigned char *getname(int window);
+
+extern void printewin(int i);

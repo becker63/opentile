@@ -79,6 +79,17 @@ int display_get_current_desktop(Display *display, Window window)
 
   return ret;
 }
+void printewin(int i){
+  printf("expectedx: %i\nexpectedy: %i\nexpectedsizex: %i\nexpectedsizey: %i\ncorrespondingWin: %i, corrWinDistance %i, corrWinName: %s",ewindows[i].expectedx, ewindows[i].expectedy,ewindows[i].expectedsizex,ewindows[i].expectedsizey /** ewindows[i].correspondingWin, ewindows[i].corrWinDistance, windows[ewindows[i].correspondingWin].name**/);
+  
+}
+
+unsigned char *getname(int window){
+  Display *display = XOpenDisplay(NULL);
+  XTextProperty text;
+  XGetWMName(display, window, &text);
+  return text.value;
+}
 
 int window_get_desktop(Display *display, Window window)
 {

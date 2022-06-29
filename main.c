@@ -55,7 +55,7 @@ int display_get_windows(Display *display, Window window, int desktop)
       windows[x1].screeny = y - attr.y;
       windows[x1].posx = attr.width;
       windows[x1].posy = attr.height;
-      windows[x1].desktop = window_get_desktop(display, twindows[count]);;
+      windows[x1].desktop = window_get_desktop(display, twindows[count]);
       x1 = x1 + 1;
     }
   }
@@ -114,8 +114,8 @@ void closesttransform(){
           int expectedx = ewindows[i].expectedx;
           int expectedy = ewindows[i].expectedy;
 
-          int i2 = findClosest(curx, cury);
-          ewindows[i].expectedx = ewindows[i2].expectedx;
+          // int i2 = findClosest(curx, cury);
+          // ewindows[i].expectedx = ewindows[i2].expectedx;
   }
 }
 
@@ -133,11 +133,11 @@ void windowinit(Display *display, Window root, int gap){
   
           int distance = sqrt(pow(curx - expectedx, 2) + pow(cury - expectedy, 2));
   
-          XMoveResizeWindow(display, windows[i].id, expectedx, expectedy, expectedSizeX, expectedSizeY);
+          //XMoveResizeWindow(display, windows[i].id, expectedx, expectedy, expectedSizeX, expectedSizeY);
           XFlush(display);
-          printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\ni: %i\n\n",curx, cury, expectedx,expectedy, distance, windows[i].name, i);
+          //printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\ni: %i\n\n",curx, cury, expectedx,expectedy, distance, windows[i].name, i);
     
-          findClosest(cury, curx);
+          findClosest(cury, curx, windows[i].id);
     i++;
   }
 }
