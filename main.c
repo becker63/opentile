@@ -107,6 +107,18 @@ void view1(Display *display,int gap){
     }
 }
    
+void closesttransform(){
+  for(int i = 0; ewindows[i].on == 1; i++){
+          int curx = windows[i].screenx;
+          int cury = windows[i].screeny;
+          int expectedx = ewindows[i].expectedx;
+          int expectedy = ewindows[i].expectedy;
+
+          int i2 = findClosest(curx, cury);
+          ewindows[i].expectedx = ewindows[i2].expectedx;
+  }
+}
+
 void windowinit(Display *display, Window root, int gap){
     view1(display, gap);
     int i = 0;
@@ -121,11 +133,11 @@ void windowinit(Display *display, Window root, int gap){
   
           int distance = sqrt(pow(curx - expectedx, 2) + pow(cury - expectedy, 2));
   
-          // XMoveResizeWindow(display, windows[i].id, expectedx, expectedy, expectedSizeX, expectedSizeY);
+          XMoveResizeWindow(display, windows[i].id, expectedx, expectedy, expectedSizeX, expectedSizeY);
           XFlush(display);
-          // printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\ni: %i\ng\ng",curx, cury, expectedx,expectedy, distance, windows[i].name, i);
+          printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\ni: %i\n\n",curx, cury, expectedx,expectedy, distance, windows[i].name, i);
     
-          findClosest(cury + curx);
+          findClosest(cury, curx);
     i++;
   }
 }

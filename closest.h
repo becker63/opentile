@@ -1,1 +1,1 @@
-extern int findClosest(int in);
+extern int findClosest(int x, int y);
