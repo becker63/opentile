@@ -7,79 +7,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "wstructs.h"
+#include "helpers.h"
+#include "closest.h"
 
-#define n 10
-
-struct windowarray
-{
-  char name[50];
-  long id;
-  int screenx;
-  int screeny;
-  int posx;
-  int posy;
-  int desktop;
-};
-
-struct expected
-{
-  int expectedsizex;
-  int expectedsizey;
-  int expectedx;
-  int expectedy;
-  int on;
-};
-
-struct expected ewindows[n];
-
-struct windowarray windows[n];
+struct expected ewindows[ng];
+struct windowarray windows[ng];
 
 Window *twindows = NULL;
 unsigned long nitems_return = 0;
-
-int display_get_current_desktop(Display *display, Window window)
-{
-  Atom actual_type_return;
-  int actual_format_return = 0;
-  unsigned long nitems_return = 0;
-  unsigned long bytes_after_return = 0;
-  long *desktop = 0;
-  long ret;
-
-  if (XGetWindowProperty(display, window, XInternAtom(display, "_NET_CURRENT_DESKTOP", False), 0, 1,
-                         False, XA_CARDINAL, &actual_type_return, &actual_format_return,
-                         &nitems_return, &bytes_after_return, (unsigned char **)&desktop) != Success)
-  {
-    return 0;
-  }
-  if (actual_type_return != XA_CARDINAL || nitems_return == 0)
-  {
-    return 0;
-  }
-
-  ret = desktop[0];
-  XFree(desktop);
-
-  return ret;
-}
-
-int window_get_desktop(Display *display, Window window)
-{
-  Atom actual_type_return;
-  int actual_format_return = 0;
-  unsigned long nitems_return = 0;
-  unsigned long bytes_after_return = 0;
-  long *desktop = 0;
-  long ret = 0;
-
-  if (XGetWindowProperty(display, window, XInternAtom(display, "_NET_WM_DESKTOP", False), 0, 1, False, XA_CARDINAL, &actual_type_return, &actual_format_return, &nitems_return, &bytes_after_return, (unsigned char **)(void *)&desktop) != Success)
-    return 0;
-
-  ret = desktop[0];
-  XFree(desktop);
-
-  return ret;
-}
 
 int display_get_windows(Display *display, Window window, int desktop)
 {
@@ -111,7 +47,7 @@ int display_get_windows(Display *display, Window window, int desktop)
 
       XTranslateCoordinates(display, twindows[count], window, 0, 0, &x, &y, &child);
 
-      //printf("%s: %lu    %d x %d,  %d x %d   %i\n\n", text.value, twindows[count], attr.width, attr.height, x - attr.x, y - attr.y, x1);
+      //printf("%s: %lu    %d x %d,  %d x %d   %i\ng\ng", text.value, twindows[count], attr.width, attr.height, x - attr.x, y - attr.y, x1);
 
       strcpy(windows[x1].name, text.value);
       windows[x1].id = twindows[count];
@@ -123,61 +59,10 @@ int display_get_windows(Display *display, Window window, int desktop)
       x1 = x1 + 1;
     }
   }
+  return 0;
 }
 
-void printstructs()
-{
-  int a;
-  printf("num    x       y      sx     sy             name                id\n\n");
-  for (a = 0; a < n; a++)
-  {
-    if (windows[a].id != 0)
-    {
-      char formatedname[20] = "";
-      // neat trictarget: https://tinyurl.com/stratindex prints string at index
-      strncpy(formatedname, &windows[a].name[0], 17);
-      strcat(formatedname, "...");
-      printf(" %i:    %i  *  %i     %i  *  %i    %s    %lu\n", a, windows[a].screenx, windows[a].screeny, windows[a].posx, windows[a].posy, formatedname, windows[a].id);
-    }
-  }
-}
-
-int findwindow(char *name){
-  int a;
-  for (a = 0; a < n; a++)
-  {
-    if (windows[a].id != 0)
-    {
-      if(strchr(name, *windows[a].name) != NULL)
-      {
-        return a;
-      }
-    }
-    }
-}
-
-int numwindows(){
-  int i = 0;
-  while(windows[i].id != 0){
-    i++;
-  }
-  return(i);
-}
-
-int enumwindows(){
-  int i = 0;
-  int i2 = 0;
-  while(i != n){
-    if (ewindows[i].on == 1){
-      i2++;
-    }
-
-    i++;
-  }
-  return(2);
-}
-
-int view1(Display *display,int gap){
+void view1(Display *display,int gap){
     int i;
     Screen *screen = ScreenOfDisplay(display, 0);
 
@@ -216,35 +101,31 @@ int view1(Display *display,int gap){
 
       //int distance = sqrt(pow(curx - expectedx, 2) + pow(cury - expectedy, 2));
 
-      //printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\n\n",curx, cury, expectedx,expectedy, distance);
+      //printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\ng\ng",curx, cury, expectedx,expectedy, distance);
 
       
     }
 }
    
-int windowinit(Display *display, Window root, int gap){
+void windowinit(Display *display, Window root, int gap){
     view1(display, gap);
     int i = 0;
     while(windows[i].id != 0){
       
-      int i2 = 0;
-      while(i2 != n){
-        if (ewindows[i2].on == 1){
-          int curx = windows[i].screenx;
+      int curx = windows[i].screenx;
           int cury = windows[i].screeny;
-          int expectedx = ewindows[i2].expectedx;
-          int expectedy = ewindows[i2].expectedy;
+          int expectedx = ewindows[i].expectedx;
+          int expectedy = ewindows[i].expectedy;
+          int expectedSizeX = ewindows[i].expectedsizex;
+          int expectedSizeY= ewindows[i].expectedsizey;
   
           int distance = sqrt(pow(curx - expectedx, 2) + pow(cury - expectedy, 2));
   
-          printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\ndesktop: %i\n\n",curx, cury, expectedx,expectedy, distance, windows[i].name, windows[i].desktop);
-      
-        }
-        i2++;
-
-      }
-
-      //printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\n\n",curx, cury, expectedx,expectedy, distance, windows[i].name);
+          // XMoveResizeWindow(display, windows[i].id, expectedx, expectedy, expectedSizeX, expectedSizeY);
+          XFlush(display);
+          // printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\ni: %i\ng\ng",curx, cury, expectedx,expectedy, distance, windows[i].name, i);
+    
+          findClosest(cury + curx);
     i++;
   }
 }
@@ -262,14 +143,12 @@ int main()
   int desktop = display_get_current_desktop(display, root);
   int currentwindows = display_get_windows(display, root, desktop);
 
-  //puts("\n");
+  //puts("\ng");
 
   int gap = 40;
 
 
   windowinit(display, root, gap);
-
-  printf("%i", desktop);
 
   Screen *screen = ScreenOfDisplay(display, 0);
   int posy = screen->height;
@@ -292,7 +171,7 @@ int main()
 
 
    
-   //printf("\n\n\n\n\n0 pos: %ix%i\n1 pos: %ix%i\n\n0 size: %ix%i\n1 size: %ix%i\n", windows[0].screenx, windows[0].screeny,windows[1].screenx, windows[1].screeny,windows[0].posx, windows[0].posy,windows[1].posx, windows[1].posy);
+   //printf("\ng\ng\ng\ng\n0 pos: %ix%i\n1 pos: %ix%i\ng\n0 size: %ix%i\n1 size: %ix%i\ng", windows[0].screenx, windows[0].screeny,windows[1].screenx, windows[1].screeny,windows[0].posx, windows[0].posy,windows[1].posx, windows[1].posy);
    return 0;
 
 }

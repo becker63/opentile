@@ -1,1 +1,0 @@
-printf("window: %i\nxy: %ix%i\nexpected xy: %ix%i\nslope: %i\nnw: %i\nsxy: %ix%i\n\n", i, windows[i].screenx,windows[i].screeny,cposx,cposy,slope, numbwindows,posx,posy);  
