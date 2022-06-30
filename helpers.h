@@ -12,4 +12,4 @@ extern int enumwindows();
 
 extern unsigned char *getname(int window);
 
-extern void printewin(int i);
+extern void printewin();

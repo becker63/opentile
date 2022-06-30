@@ -22,5 +22,16 @@ struct expected
   int corrWinDistance;
 };
 
+struct Transform
+{
+  int expectedx;
+  int expectedy;
+  int x;
+  int y;
+  int distance;
+  int id;
+};
+
 extern struct expected ewindows[ng];
 extern struct windowarray windows[ng];
+extern struct Transform transform[ng];

@@ -19,7 +19,7 @@ int findwindow(char *name){
     }
     }
     return 0;
-}
+} 
 
 int enumwindows(){
   int i2 = 0;
@@ -79,9 +79,10 @@ int display_get_current_desktop(Display *display, Window window)
 
   return ret;
 }
-void printewin(int i){
-  printf("expectedx: %i\nexpectedy: %i\nexpectedsizex: %i\nexpectedsizey: %i\ncorrespondingWin: %i, corrWinDistance %i, corrWinName: %s",ewindows[i].expectedx, ewindows[i].expectedy,ewindows[i].expectedsizex,ewindows[i].expectedsizey /** ewindows[i].correspondingWin, ewindows[i].corrWinDistance, windows[ewindows[i].correspondingWin].name**/);
-  
+void printewin(){
+  for(int i = 0; ewindows[i].on == 1; i++){
+  printf("i: %i\nexpectedx: %i\nexpectedy: %i\n\n",i, ewindows[i].expectedx, ewindows[i].expectedy);
+  }
 }
 
 unsigned char *getname(int window){

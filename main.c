@@ -122,6 +122,7 @@ void closesttransform(){
 void windowinit(Display *display, Window root, int gap){
     view1(display, gap);
     int i = 0;
+    printewin();
     while(windows[i].id != 0){
       
       int curx = windows[i].screenx;
@@ -136,8 +137,8 @@ void windowinit(Display *display, Window root, int gap){
           //XMoveResizeWindow(display, windows[i].id, expectedx, expectedy, expectedSizeX, expectedSizeY);
           XFlush(display);
           //printf("x: %i\ny: %i\nexpected x: %i\nexpected y: %i\ndistance: %i\nname: %s\ni: %i\n\n",curx, cury, expectedx,expectedy, distance, windows[i].name, i);
-    
-          findClosest(cury, curx, windows[i].id);
+
+          findClosest(cury, curx, windows[i].id, i);
     i++;
   }
 }
