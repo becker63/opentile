@@ -16,57 +16,49 @@ int smallest_element_index(int work_array[], int max_j)
 
         return index;
 }
- 
 
-int transformgen(int x, int y, int id, int i, struct Transform transform[]){
+void printTransform(struct Transform transform[]){
     int size = enumwindows();
-    struct Temp  {
-        int *distance;
-        int *ex;
-        int *ey;
-        int *x;
-        int *y;
-        int *id;
-    };
+    for(int i = 0; i != size; i++){
+                
+        printf("\ndistance: %i\neid: %i\nid: %i\n\n", transform[i].distance, transform[i].eid, transform[i].id);
 
-    struct Temp tdata;
-
-    tdata.distance = (int*)malloc(sizeof(int) * size);
-    /** lol so dumb, I only need one of these (distance), Ill clean up later **/
-    tdata.ex = (int*)malloc(sizeof(int) * size);
-    tdata.ey = (int*)malloc(sizeof(int) * size);
-    tdata.x = (int*)malloc(sizeof(int) * size);
-    tdata.y = (int*)malloc(sizeof(int) * size);
-    tdata.id = (int*)malloc(sizeof(int) * size);
-
-    for(int i = 0; ewindows[i].on == 1; i++){
-        int distance = sqrt(pow(x - ewindows[i].expectedx, 2) + pow(y - ewindows[i].expectedy, 2));
-        tdata.distance[i] = distance;
-        tdata.ex[i] = ewindows[i].expectedx;
-        tdata.ey[i] = ewindows[i].expectedy;
-        tdata.x[i] = windows[i].posx;
-        tdata.y[i] = windows[i].posy;
-        tdata.id[i] = windows[i].id;
     }
+}
 
-    int closest = smallest_element_index(tdata.distance, size); /** Smallest eWindow index **/
+void checkDupes(struct Transform transform[], int size){
 
-    transform[i].distance = tdata.distance[closest];
-    transform[i].expectedx = tdata.ex[closest];
-    transform[i].expectedy = tdata.ey[closest];
-    transform[i].x = tdata.x[closest];
-    transform[i].y = tdata.y[closest];
-    transform[i].id = tdata.id[closest];
-    
+   for (int i = 0; i < size; i++) {
+        transform[transform[i].eid % size].eid
+            = transform[transform[i].eid % size].eid + size;
+    }
+    printf("The repeating elements are : \n");
+    for (int i = 0; i < size; i++) {
+        if (transform[i].eid >= size * 2) {
+            printf("%d  \n", i );
+        }
+    }
+}
 
-    free(tdata.distance);
-    free(tdata.ex);
-    free(tdata.ey);
-    free(tdata.x);
-    free(tdata.y);
-    printf("\n\n\n\n");
-    return closest;
-    
+void transformgen(struct Transform transform[]){
+    int size = enumwindows();
+
+    for(int i = 0; i != size; i++){
+
+        int distancelist[size];
+        transform[i].id = windows[i].id;
+        for(int i2 = 0; i2 != size; i2++){
+
+            int distance = sqrt(pow(windows[i].posx - ewindows[i2].expectedx, 2) + pow(windows[i].posy - ewindows[i2].expectedy, 2));
+
+            distancelist[i2] = distance;
+        }
+
+        int smallest = smallest_element_index(distancelist, size);
+        transform[i].distance = distancelist[smallest];
+        transform[i].eid = smallest;
+
+    }
 }
 
 void transformClean(struct Transform transform[]){
@@ -74,13 +66,10 @@ void transformClean(struct Transform transform[]){
 }
 
 int findClosest(int x, int y, int id){
-    puts("start");
     int size = enumwindows();
-    struct Transform transform[size];
-    for(int i = 0; ewindows[i].on == 1; i++){
-        transformgen(windows[i].screenx, windows[i].screeny, windows[i].id, i, transform);
-        
-        printf("tdistance: %i\n tex: %i\n tey: %i\ntx: %i\nty: %i\ntid: %i", transform[i].distance, transform[i].expectedx,  transform[i].expectedy, transform[i].x, transform[i].y, transform[i].id);
-    }
-    puts("\n\nend\n\n\n\n");
+    struct Transform transform[size * size];
+    transformgen(transform);
+    printTransform(transform);
+    checkDupes(transform, size);
+    puts("\n\n\n\n\n");
 }

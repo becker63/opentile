@@ -24,12 +24,9 @@ struct expected
 
 struct Transform
 {
-  int expectedx;
-  int expectedy;
-  int x;
-  int y;
   int distance;
   int id;
+  int eid;
 };
 
 extern struct expected ewindows[ng];
