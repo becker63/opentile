@@ -27,6 +27,7 @@ struct Transform
   int distance;
   int id;
   int eid;
+  int* distancelist;
 };
 
 extern struct expected ewindows[ng];

@@ -47,7 +47,7 @@ int display_get_windows(Display *display, Window window, int desktop)
 
       XTranslateCoordinates(display, twindows[count], window, 0, 0, &x, &y, &child);
 
-      //printf("%s: %lu    %d x %d,  %d x %d   %i\ng\ng", text.value, twindows[count], attr.width, attr.height, x - attr.x, y - attr.y, x1);
+      // printf("%s: %lu    %d x %d,  %d x %d   %i\n\n", text.value, twindows[count], attr.width, attr.height, x - attr.x, y - attr.y, x1);
 
       strcpy(windows[x1].name, text.value);
       windows[x1].id = twindows[count];
@@ -107,31 +107,23 @@ void view1(Display *display,int gap){
     }
 }
    
-void closesttransform(){
-  for(int i = 0; ewindows[i].on == 1; i++){
-          int curx = windows[i].screenx;
-          int cury = windows[i].screeny;
-          int expectedx = ewindows[i].expectedx;
-          int expectedy = ewindows[i].expectedy;
-
-          // int i2 = findClosest(curx, cury);
-          // ewindows[i].expectedx = ewindows[i2].expectedx;
-  }
-}
-
 void windowinit(Display *display, Window root, int gap){
     view1(display, gap);
     int i = 0;
-    printewin();
+    printewin(-1);
     puts("\n\n");
-    while(windows[i].id != 0){
       
-      int curx = windows[i].screenx;
-      int cury = windows[i].screeny;
+    int curx = windows[i].screenx;
+    int cury = windows[i].screeny;
         
-          findClosest(cury, curx, windows[i].id, i);
-    i++;
-  }
+    genClosest();
+    int size = numwindows();
+
+    for(int i2 = 0; size != i2; i2++){
+      XMoveResizeWindow(display, windows[i2].id, windows[i2].screenx, windows[i2].screeny, windows[i2].posx, windows[i].posy);
+      XFlush(display);
+    }
+
 }
   
  

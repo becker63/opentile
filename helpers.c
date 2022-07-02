@@ -79,9 +79,14 @@ int display_get_current_desktop(Display *display, Window window)
 
   return ret;
 }
-void printewin(){
+void printewin(int i2){
+  if(i2 == -1){
   for(int i = 0; ewindows[i].on == 1; i++){
   printf("i: %i\nexpectedx: %i\nexpectedy: %i\n\n",i, ewindows[i].expectedx, ewindows[i].expectedy);
+  }
+  }
+  else{
+    printf("i: %i\nexpectedx: %i\nexpectedy: %i\n\n",i2, ewindows[i2].expectedx, ewindows[i2].expectedy);
   }
 }
 
