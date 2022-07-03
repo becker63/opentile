@@ -10,6 +10,7 @@
 #include "wstructs.h"
 #include "helpers.h"
 #include "closest.h"
+#include "sine.h"
 
 struct expected ewindows[ng];
 struct windowarray windows[ng];
@@ -144,7 +145,9 @@ int main()
   int gap = 40;
 
 
-  windowinit(display, root, gap);
+  //windowinit(display, root, gap);
+
+  sine();
 
   Screen *screen = ScreenOfDisplay(display, 0);
   int posy = screen->height;
