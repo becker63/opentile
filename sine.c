@@ -19,30 +19,44 @@
         return value;
         
     }
+    void fancyMoveResizeWindow(int id, Display *display, int newX, int newY, int newSizex, int newSizey){
+        for(int i = 0; i != 100; i++){
+            int values[4] = {0,0,0,0};  
+            values[0] =  values[0] + generate(i, newX);
+            values[1] = values[1] + generate(i, newY);
+            values[2] = values[2] + generate(i, newSizex);
+            values[3] = values[3] + generate(i, newSizey);
+            for(int i2 = 0; i2 != 4; i2++){
+                printf("%i: %i\n", i2, values[i2]);
+            }
+            printf("i: %i,  val = %i\n\nx: %i\ny: %i\nsx: %i\nsy: %i\n\nrx: %i\nry: %i\nrsx: %i\nrsy: %i",i, generate(i, newX), windows[id].screenx, windows[id].screeny, windows[id].posx, windows[id].posy,values[0], values[1],values[2], values[3]);
+            XMoveResizeWindow(display, windows[id].id, values[0], values[1], values[2], values[3]);
+            XFlush(display);
+            msleep(10);
+        }
+        XMoveResizeWindow(display, windows[id].id, newX, newY, newSizex, newSizey);
+        XFlush(display);
 
-    int sine()
+    }
+
+    int sine(Display *display)
     {  
-        Display *display = XOpenDisplay(NULL);
+        //Display *display = XOpenDisplay(NULL);
         int final;
         char name[] = "becker@becker: ~";
         int cur = findwindow(name); 
 
-        for(int i2 = 0; i2 != 100; i2++){
 
-        int expdist = 100 * i2;
-        int dist = expdist + 2;
+        int expdist = 300;
+        int dist = expdist + (expdist / 100);
         
+        XMoveResizeWindow(display, windows[cur].id, 0, 0, 10, 10);
+        XFlush(display);
+        fancyMoveResizeWindow(cur, display, expdist, 0, expdist, expdist);
+        XMoveResizeWindow(display, windows[cur].id, 0, 0, 10, 10);
+        
+        //printf("%i  %i  %i\n",expdist - final, expdist, final);
 
-        for(int i = 0; i != 100; i++){
-            int value = generate(i, dist);
-            //printf("i: %i,  val = %i\nx: %i\n",i, value, windows[cur].screenx + value);
-            final = windows[cur].screenx + value;
-            XMoveWindow(display, windows[cur].id, windows[cur].screenx + value, windows[cur].screeny);
-            XFlush(display);
-            // msleep(10);
-        }
-        printf("%i  %i  %i\n",expdist - final, expdist, final);
-        }
         return 0;
         
     }

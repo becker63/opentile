@@ -147,7 +147,7 @@ int main()
 
   //windowinit(display, root, gap);
 
-  sine();
+  sine(display);
 
   Screen *screen = ScreenOfDisplay(display, 0);
   int posy = screen->height;
