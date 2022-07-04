@@ -20,19 +20,23 @@
         
     }
     void fancyMoveResizeWindow(int id, Display *display, int newX, int newY, int newSizex, int newSizey){
-        for(int i = 0; i != 100; i++){
-            int values[4] = {0,0,0,0};  
-            values[0] =  values[0] + generate(i, newX);
-            values[1] = values[1] + generate(i, newY);
-            values[2] = values[2] + generate(i, newSizex);
-            values[3] = values[3] + generate(i, newSizey);
-            for(int i2 = 0; i2 != 4; i2++){
-                printf("%i: %i\n", i2, values[i2]);
-            }
-            printf("i: %i,  val = %i\n\nx: %i\ny: %i\nsx: %i\nsy: %i\n\nrx: %i\nry: %i\nrsx: %i\nrsy: %i",i, generate(i, newX), windows[id].screenx, windows[id].screeny, windows[id].posx, windows[id].posy,values[0], values[1],values[2], values[3]);
-            XMoveResizeWindow(display, windows[id].id, values[0], values[1], values[2], values[3]);
+        for(int i = 0; i != 100; i++){;  
+            int tvaluex = windows[id].screenx - newX;
+            int valuex = generate(i, tvaluex);
+
+            int tvaluey = windows[id].screeny - newY;
+            int valuey = generate(i, tvaluey);
+
+            int tsizex = windows[id].posx - newSizex;
+            int sizex = generate(i, tsizex);
+
+            int tsizey = windows[id].posy - newSizey;
+            int sizey = generate(i, tsizey);
+
+            printf("i: %i,  val = %i\n\nx: %i\ny: %i\nsx: %i\nsy: %i\n\nrx: %i\nry: %i\nrsx: %i\nrsy: %i",i, generate(i, newX), windows[id].screenx, windows[id].screeny, windows[id].posx, windows[id].posy,valuex, valuey,sizex, sizey);
+            XMoveResizeWindow(display, windows[id].id, valuex, valuey, sizex, sizey);
             XFlush(display);
-            msleep(10);
+            msleep(100);
         }
         XMoveResizeWindow(display, windows[id].id, newX, newY, newSizex, newSizey);
         XFlush(display);
