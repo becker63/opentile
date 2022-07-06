@@ -14,6 +14,7 @@
 
 struct expected ewindows[ng];
 struct windowarray windows[ng];
+struct newPos newWinPos[ng];
 
 Window *twindows = NULL;
 unsigned long nitems_return = 0;
@@ -121,8 +122,9 @@ void windowinit(Display *display, Window root, int gap){
     int size = numwindows();
 
     for(int i2 = 0; size != i2; i2++){
-      XMoveResizeWindow(display, windows[i2].id, windows[i2].screenx, windows[i2].screeny, windows[i2].posx, windows[i].posy);
-      XFlush(display);
+      //XMoveResizeWindow(display, windows[i2].id, windows[i2].screenx, windows[i2].screeny, windows[i2].posx, windows[i].posy);
+      //XFlush(display);
+      fancyMoveResizeWindow(i2, display, newWinPos[i2].screenx, newWinPos[i2].screeny);
     }
 
 }
@@ -145,9 +147,9 @@ int main()
   int gap = 40;
 
 
-  //windowinit(display, root, gap);
+  windowinit(display, root, gap);
 
-  sine(display);
+  //sine(display);
 
   Screen *screen = ScreenOfDisplay(display, 0);
   int posy = screen->height;

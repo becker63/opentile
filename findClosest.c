@@ -125,10 +125,10 @@ int genClosest(){
 
     for(int i = 0; i != size; i++){
         printTransform(transform, i);
-        windows[i].screenx = ewindows[transform[i].eid].expectedx;
-        windows[i].screeny = ewindows[transform[i].eid].expectedy;
-        windows[i].posx = ewindows[transform[i].eid].expectedsizex;
-        windows[i].posy = ewindows[transform[i].eid].expectedsizey;
+        newWinPos[i].screenx = ewindows[transform[i].eid].expectedx;
+        newWinPos[i].screeny = ewindows[transform[i].eid].expectedy;
+        newWinPos[i].posx = ewindows[transform[i].eid].expectedsizex;
+        newWinPos[i].posy = ewindows[transform[i].eid].expectedsizey;
         printf("\nx: %i, y: %i\n",windows[i].screenx, windows[i].screeny);
     }
     puts("\n\n\n\n\n");

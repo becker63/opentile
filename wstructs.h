@@ -11,6 +11,15 @@ struct windowarray
   int desktop;
 };
 
+struct newPos
+{
+  long id;
+  int screenx;
+  int screeny;
+  int posx;
+  int posy;
+};
+
 struct expected
 {
   int expectedsizex;
@@ -32,4 +41,5 @@ struct Transform
 
 extern struct expected ewindows[ng];
 extern struct windowarray windows[ng];
+extern struct newPos newWinPos[ng];
 extern struct Transform transform[ng];
